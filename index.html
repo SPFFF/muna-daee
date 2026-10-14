@@ -544,8 +544,6 @@ main .wrap{padding-bottom:0!important;margin-bottom:0!important}
 #sheet .contacts b,.contacts b{font-family:var(--f-serif)!important;font-weight:500!important;font-size:20px;letter-spacing:.04em;color:#8E4A5A;font-variant-numeric:lining-nums tabular-nums!important;font-feature-settings:"lnum" 1,"tnum" 1!important}
 /* smooth scrolling: fixed backdrops keep one size while the browser bar slides; heavy layers get their own compositor layer */
 #bg,#veil,#wall,#wall3,#air,#bfclip{inset:auto!important;top:0!important;left:0!important;width:100%!important;height:100vh!important;height:100lvh!important}
-#bg img,#wall img,#wall3 img,.stage .behind,.stage .frame,.door,#gate{will-change:transform,opacity;backface-visibility:hidden;-webkit-backface-visibility:hidden}
-#wall,#wall3,#veil{will-change:opacity;transform:translateZ(0)}
 #wall2,#wall4{display:none!important}
 #gate.fade{transition:opacity .9s ease!important}
 main .wrap{max-width:390px!important;--vw1:3.9px}
@@ -596,7 +594,8 @@ html[lang=en] .vtx span{white-space:nowrap;font-size:calc(var(--vw1) * 2.72)!imp
 html{scrollbar-width:none;-ms-overflow-style:none}html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
 html.inner,html.inner body{height:100%;overflow:hidden}
 html.inner body{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:none}
-html.inner body.locked{overflow:hidden}
+html.inner body.locked{overflow-y:auto}
+html.inner #gate{touch-action:none}
 html.inner #bg,html.inner #veil,html.inner #wall,html.inner #wall3,html.inner #air,html.inner #bfclip{height:100%!important}
 /* RSVP sheet */
 #sheet{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;background:rgba(90,48,64,.28);opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s linear .4s}
@@ -878,7 +877,10 @@ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* music: decoded before the first tap */
 /* decode every picture up front so nothing stalls the first time it scrolls into view */
-[...document.images].forEach(i=>{try{i.decoding='async';i.decode&&i.decode().catch(()=>{})}catch(e){}});
+/* (after the opening has played, one picture at a time while the phone is idle) */
+{const imgs=[...document.images];let k=0;const idle=window.requestIdleCallback||(f=>setTimeout(f,120));
+ const next=()=>{if(k>=imgs.length)return;const i=imgs[k++];try{(i.decode?i.decode():Promise.resolve()).catch(()=>{}).then(()=>idle(next))}catch(e){idle(next)}};
+ const start=()=>setTimeout(()=>idle(next),4500);document.getElementById('tapBtn').addEventListener('click',start,{once:true})}
 const song=$('song'),musicBtn=$('musicBtn');let wantMusic=true;
 const songUrl=(()=>{const el=$('songData');const u=el.textContent.trim();el.remove();return u})();song.preload='auto';fetch(songUrl).then(r=>r.blob()).then(b=>{if(!song.src){song.src=URL.createObjectURL(b);song.load()}}).catch(()=>{if(!song.src)song.src=songUrl});
 function setMusic(on){wantMusic=on;musicBtn.setAttribute('aria-pressed',String(on));if(on)song.play().catch(()=>{});else song.pause()}
@@ -888,9 +890,9 @@ musicBtn.addEventListener('click',e=>{e.stopPropagation();setMusic(!wantMusic)})
 let opened=false;
 $('tapBtn').addEventListener('click',()=>{if(opened)return;opened=true;window.scrollTo(0,0);
   if(wantMusic){if(!song.src)song.src=songUrl;const p=song.play();if(p&&p.catch)p.catch(()=>{song.addEventListener('canplay',()=>{if(wantMusic)song.play().catch(()=>{})},{once:true})})}
-  $('gate').classList.add('open');body.classList.add('opened');bfGo();setTimeout(()=>body.classList.add('cardOpen'),450);
+  body.classList.add('opened');requestAnimationFrame(()=>requestAnimationFrame(()=>{$('gate').classList.add('open');bfGo()}));setTimeout(()=>body.classList.add('cardOpen'),450);
   setTimeout(()=>$('gate').classList.add('fade'),reduce?0:2500);
-  setTimeout(()=>{$('gate').classList.add('gone');body.classList.add('cardOpen');body.classList.remove('locked');window.scrollTo(0,0);musicBtn.hidden=false;arm()},reduce?50:3150)});
+  setTimeout(()=>{$('gate').classList.add('gone');body.classList.add('cardOpen');body.classList.remove('locked');window.scrollTo(0,0);musicBtn.hidden=false},reduce?50:3150)});
 $('again').addEventListener('click',()=>{window.scrollTo(0,0);opened=false;body.classList.add('locked');body.classList.remove('opened','scrolled','cardOpen');{const e=$('ending');if(e)e.classList.remove('in')}bfReset();
   const g=$('gate');g.classList.remove('gone','fade');void g.offsetWidth;g.classList.remove('open');song.pause();song.currentTime=0;musicBtn.hidden=true});
 
@@ -898,6 +900,8 @@ $('again').addEventListener('click',()=>{window.scrollTo(0,0);opened=false;body.
 const cards=[...document.querySelectorAll('.card')];
 const io='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('wait');io.unobserve(e.target)}}),{threshold:.12}):null;
 function arm(){if(!io||reduce)return;cards.forEach(c=>{if(c.getBoundingClientRect().top>innerHeight*.9){c.classList.add('wait');io.observe(c)}})}
+/* hide the reading cards before the guest taps, so nothing heavy happens while the opening plays */
+arm();
 addEventListener('scroll',()=>{body.classList.toggle('scrolled',scrollY>innerHeight*.35)},{passive:true});
 
 /* countdown */
