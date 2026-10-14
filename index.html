@@ -584,9 +584,11 @@ html[lang=en] #par{zoom:1}
 html[lang=en] .vtx span{white-space:nowrap;font-size:calc(var(--vw1) * 2.72)!important;line-height:1.5}
 
 /* timeline: every label sits in the same fixed column, centred on one line, icons beside it never overlap */
-.vc{gap:12px!important}
+/* centre line → icon and icon → text use the same 17px gap; every time sits on one shared centre per side */
+.vc{gap:17px!important;padding:0!important}
 .vc.l{justify-content:flex-end!important}.vc.r{justify-content:flex-start!important}
-.vtx{flex:0 0 auto!important;width:auto!important;display:flex;flex-direction:column;align-items:center}
+.vtx{flex:1 1 0!important;width:auto!important;min-width:0;display:flex;flex-direction:column;align-items:center}
+.vc.l .vtx{align-items:flex-end;text-align:right!important}.vc.r .vtx{align-items:flex-start;text-align:left!important}
 .vtx b,.vtx span{white-space:nowrap}
 .vc .vic,.vr:first-child .vc .vic{width:50px!important;height:48px!important;flex:0 0 50px!important}
 #sheet .nums b{font-family:var(--f-serif)!important;font-weight:500!important;font-size:20px!important;letter-spacing:.04em;color:#8E4A5A;font-variant-numeric:lining-nums tabular-nums!important;font-feature-settings:"lnum" 1,"tnum" 1!important}
