@@ -565,6 +565,14 @@ html[lang=en] .par2{font-size:min(13px,calc(var(--vw1) * 3.3))}
 html[lang=en] .par2 div{white-space:nowrap}
 
 html[lang=en] #when{white-space:nowrap;font-size:min(13.5px,calc(var(--vw1) * 3.4))}
+/* one button style everywhere: soft blue with a pink rim (as the calendar button) */
+.mapcard .go,#sendTxt.pri{font-family:var(--f-thai)!important;color:#2F4C7E!important;font-weight:500!important;letter-spacing:.02em!important;
+  background:linear-gradient(180deg,#EAF2FD 0%,#C9DCF5 100%)!important;border:1.5px solid #E7A1B8!important;border-radius:999px!important;
+  box-shadow:0 0 0 3px rgba(255,236,242,.75),0 8px 18px -8px rgba(60,90,150,.55),inset 0 1px 0 rgba(255,255,255,.9)!important}
+.mapcard .go{font-size:12.5px!important;padding:6px 16px!important;bottom:12px!important}
+#sendTxt.pri{display:block;width:auto!important;min-width:150px;margin:6px auto 0!important;font-size:13.5px!important;padding:8px 26px!important}
+#sendTxt.pri:active,.mapcard:active .go{filter:brightness(.97)}
+#sendTxt.pri:disabled{opacity:.7}
 /* RSVP sheet */
 #sheet{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;background:rgba(90,48,64,.28);opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s linear .4s}
 #sheet.on{opacity:1;visibility:visible;transition:opacity .4s}
