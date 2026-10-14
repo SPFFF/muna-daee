@@ -446,7 +446,7 @@ body.scrolled .fc.tl{transform:none}body.scrolled .fc.tr{transform:scaleX(-1)}bo
 .scrollhint{margin-top:calc(1.6*var(--u,1dvh))!important;margin-bottom:calc(clamp(56px,calc(9*var(--u,1dvh)),84px) + env(safe-area-inset-bottom,0px))!important}
 .wrap > .card:first-child{margin-top:0!important}
 .card .when,.card .apology{font-family:var(--f-thai);font-size:clamp(11.5px,calc(var(--vw1) * 3.25),15.5px);font-weight:500;line-height:2.05;color:#754454}
-.card .when{margin:26px 0 0}.card .apology{margin:4px 0 0;font-size:clamp(10px,calc(var(--vw1) * 2.8),13px)!important}
+.card .when{margin:26px 0 0}.card .apology{margin:4px 0 0;font-size:clamp(10px,calc(var(--vw1) * 2.72),13px)!important}
 .calbtn{display:inline-flex;align-items:center;gap:7px;margin-top:22px;padding:7px 16px 7px 13px;border-radius:999px;font-size:13px;letter-spacing:.04em;color:#754454;text-decoration:none;
   background:linear-gradient(180deg,rgba(255,250,250,.75),rgba(250,226,230,.6));border:1px solid rgba(181,105,122,.45);box-shadow:0 4px 12px -6px rgba(117,68,84,.45),inset 0 1px 0 rgba(255,255,255,.8);
   opacity:0;transform:translateY(10px);transition:opacity 1.2s ease 5.3s,transform 1.2s ease 5.3s}
@@ -581,10 +581,15 @@ html[lang=en] #par{zoom:1}
 .vtx span{font-size:calc(var(--vw1) * 3.25 * 1.08)!important;color:#754454}
 /* the closing frame is as tall as the screen with the browser bar hidden, so nothing above peeks in */
 .card.ending{min-height:var(--lvhz,var(--vh,100vh))!important}
-html[lang=en] .vtx span{white-space:nowrap;font-size:calc(var(--vw1) * 2.92)!important;line-height:1.5}
-html[lang=en] .vic{width:54px!important;height:50px!important}
+html[lang=en] .vtx span{white-space:nowrap;font-size:calc(var(--vw1) * 2.72)!important;line-height:1.5}
+
 /* opening page is as tall as the phone screen; the countdown stays where the first view ends, the extra is balcony only */
 .hero{height:var(--fixh,var(--vh,100vh))!important;padding-bottom:var(--herob,0px)!important;box-sizing:border-box}
+/* timeline: every label sits in the same fixed column, centred on one line, icons beside it never overlap */
+.vc{justify-content:space-between!important;gap:4px!important}
+.vtx{flex:0 0 106px!important;width:106px!important;display:flex;flex-direction:column;align-items:center}
+.vtx b,.vtx span{white-space:nowrap}
+.vic{width:50px!important;height:48px!important;flex:0 0 50px!important}
 /* RSVP sheet */
 #sheet{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;background:rgba(90,48,64,.28);opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s linear .4s}
 #sheet.on{opacity:1;visibility:visible;transition:opacity .4s}
