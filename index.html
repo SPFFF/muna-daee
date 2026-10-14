@@ -583,6 +583,11 @@ html[lang=en] #par{zoom:1}
 .card.ending{min-height:var(--lvhz,var(--vh,100vh))!important}
 html[lang=en] .vtx span{white-space:nowrap;font-size:calc(var(--vw1) * 2.72)!important;line-height:1.5}
 
+/* timeline: every label sits in the same fixed column, centred on one line, icons beside it never overlap */
+.vc{justify-content:space-between!important;gap:4px!important}
+.vtx{flex:0 0 106px!important;width:106px!important;display:flex;flex-direction:column;align-items:center}
+.vtx b,.vtx span{white-space:nowrap}
+.vc .vic,.vr:first-child .vc .vic{width:50px!important;height:48px!important;flex:0 0 50px!important}
 /* RSVP sheet */
 #sheet{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;background:rgba(90,48,64,.28);opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s linear .4s}
 #sheet.on{opacity:1;visibility:visible;transition:opacity .4s}
