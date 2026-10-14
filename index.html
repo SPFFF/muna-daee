@@ -541,6 +541,8 @@ html{overflow-x:clip}
 .card.ending{min-height:100vh;min-height:var(--vh,100dvh);justify-content:center!important;padding-top:76px!important;padding-bottom:60px!important;box-sizing:border-box}
 main .wrap{padding-bottom:0!important;margin-bottom:0!important}
 html,body{overscroll-behavior-y:none}
+#sheet h3{font-family:var(--f-thai)!important;font-weight:600!important;letter-spacing:.02em!important;text-transform:none!important}
+#sheet .contacts b,.contacts b{font-family:var(--f-thai)!important;font-weight:500;font-size:17px;letter-spacing:.03em;font-variant-numeric:lining-nums tabular-nums}
 /* RSVP sheet */
 #sheet{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;background:rgba(90,48,64,.28);opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s linear .4s}
 #sheet.on{opacity:1;visibility:visible;transition:opacity .4s}
@@ -919,8 +921,8 @@ function sendForm(){const b=$('sendTxt');if(b.disabled)return;b.disabled=true;co
   const yes=go==='yes',fd=new URLSearchParams();const put=(k,v)=>{if(FORM[k])fd.append('entry.'+FORM[k],v)};
   put('name',$('gName').value.trim());put('rel',$('gRel').selectedOptions[0].textContent);put('go',yes?'ยินดีมาร่วมงาน':'ไม่สะดวกมาร่วมงาน');put('count',yes?String(count):'0');put('tel',$('gTel').value.trim());put('wish',$('gWish').value.trim());
   const done=ok=>{b.disabled=false;b.textContent=old;
-    $('shTitle').textContent=ok?T('ขอบคุณค่ะ','Thank you'):T('ส่งไม่สำเร็จ','Could not send');
-    $('shSub').textContent=ok?(yes?T('ได้รับคำตอบแล้ว แล้วพบกันในวันงานนะคะ','Your reply has been received. See you on the day!'):T('ได้รับคำตอบแล้ว ขอบคุณที่แจ้งให้ทราบค่ะ','Your reply has been received. Thank you for letting us know.')):T('กรุณาลองใหม่ หรือคัดลอกข้อความส่งถึงเราแทน','Please try again, or copy the message and send it to us');
+    $('shTitle').textContent=ok?T('ขอบคุณค่ะ/ครับ','Thank you'):T('ส่งไม่สำเร็จ','Could not send');
+    $('shSub').textContent=ok?(yes?T('ได้รับคำตอบแล้ว แล้วพบกันในวันงานนะคะ/ครับ','Your reply has been received. See you on the day!'):T('ได้รับคำตอบแล้ว ขอบคุณที่แจ้งให้ทราบค่ะ/ครับ','Your reply has been received. Thank you for letting us know.')):T('กรุณาลองใหม่ หรือคัดลอกข้อความส่งถึงเราแทน','Please try again, or copy the message and send it to us');
     sheet.classList.toggle('sent',ok);if(!ok)fill();sheet.classList.add('on');if(ok){$('fm').reset();go=null;count=1;$('gCount').textContent=1;$('countWrap').hidden=true;document.querySelectorAll('[data-go]').forEach(x=>x.setAttribute('aria-checked','false'))}};
   fetch(FORM.url,{method:'POST',mode:'no-cors',body:fd}).then(()=>done(true),()=>done(false))}
 const close=()=>sheet.classList.remove('on');$('shClose').addEventListener('click',close);sheet.addEventListener('click',e=>{if(e.target===sheet)close()});
