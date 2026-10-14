@@ -532,15 +532,14 @@ body.scrolled.marble #wall4{opacity:1}
 #qrbox img{max-height:calc(var(--vh,100dvh) - 150px);max-width:92vw;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);-webkit-touch-callout:default;user-select:auto}
 #qrbox p{margin:0;color:#fff;font-size:14px;text-align:center}
 #qrbox button{background:rgba(255,250,248,.95);color:#754454;border:0;border-radius:999px;padding:7px 22px;font:500 14px var(--f-thai)}
-html,body{overflow-x:hidden;overscroll-behavior-x:none}
-body{touch-action:pan-y pinch-zoom}
+@media (pointer:coarse){html,body{overflow-x:hidden;overscroll-behavior-x:none}body{touch-action:pan-y pinch-zoom}}
 .giftcard .giftimg{margin-bottom:4px}
 #bfclip{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:50}
 #bfclip #bf{position:absolute}
-html{overflow-x:clip}
+@media (pointer:coarse){html{overflow-x:clip}}
 .card.ending{min-height:100vh;min-height:var(--vh,100dvh);justify-content:center!important;padding-top:76px!important;padding-bottom:60px!important;box-sizing:border-box}
 main .wrap{padding-bottom:0!important;margin-bottom:0!important}
-html,body{overscroll-behavior-y:none}
+@media (pointer:coarse){html,body{overscroll-behavior-y:none}}
 #sheet h3{font-family:var(--f-thai)!important;font-weight:600!important;letter-spacing:.02em!important;text-transform:none!important}
 #sheet .contacts b,.contacts b{font-family:var(--f-thai)!important;font-weight:500;font-size:17px;letter-spacing:.03em;font-variant-numeric:lining-nums tabular-nums}
 /* RSVP sheet */
@@ -796,6 +795,7 @@ body.opened #ctl{opacity:1;pointer-events:auto}
     const f=document.createElement('iframe');f.id='deskframe';f.title='Muna & Daee Wedding';f.setAttribute('allow','autoplay');
     try{f.src=URL.createObjectURL(new Blob([html],{type:'text/html'}))}catch(e){f.srcdoc=html}
     document.body.appendChild(f);
+    addEventListener('wheel',e=>{const d=e.deltaMode===1?e.deltaY*40:e.deltaMode===2?e.deltaY*innerHeight:e.deltaY;try{f.contentWindow.postMessage({mdWheel:d},'*')}catch(_){}},{passive:true});
     if(beh&&beh.src){const im=new Image();im.onload=()=>{try{const c=document.createElement('canvas');c.width=24;c.height=42;c.getContext('2d').drawImage(im,0,0,24,42);bg.style.backgroundImage='url('+c.toDataURL()+')'}catch(e){}};im.src=beh.src}};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
 })();
@@ -859,6 +859,15 @@ cd();setInterval(cd,1000);
  rows.forEach(r=>{const ic=r.querySelector('.vic');if(!ic)return;ic.addEventListener('click',()=>{r.classList.remove('tap');void r.offsetWidth;r.classList.add('tap');setTimeout(()=>r.classList.remove('tap'),650);
   const c=ic.parentNode;for(let k=0;k<5;k++){const p=document.createElement('i');p.className='pop';const a=-Math.PI/2+(k-2)*.5;p.style.left=(ic.offsetLeft+ic.offsetWidth/2)+'px';p.style.top=(ic.offsetTop+ic.offsetHeight*.3)+'px';
    p.style.setProperty('--dx',Math.cos(a)*36+'px');p.style.setProperty('--dy',Math.sin(a)*40+'px');p.innerHTML='<svg viewBox="0 0 24 22"><path d="M12 21C3 15 0 9 3 5c3-4 7-3 9 1 2-4 6-5 9-1 3 4 0 10-9 16z" fill="#D98AA5"/></svg>';c.appendChild(p);setTimeout(()=>p.remove(),1000)}})})}
+/* mouse wheel: drive the scroll ourselves on desktop (some browsers drop wheel scrolling inside the framed card) */
+if(window.__phone||matchMedia('(pointer:fine)').matches){let target=0,raf=0;const sc=document.scrollingElement||document.documentElement;
+  const go=d=>{const max=sc.scrollHeight-innerHeight;if(!raf)target=sc.scrollTop;target=Math.max(0,Math.min(max,target+d));if(!raf)raf=requestAnimationFrame(step)};
+  const step=()=>{const y=sc.scrollTop,dy=target-y;if(Math.abs(dy)<1){sc.scrollTop=target;raf=0;return}sc.scrollTop=y+dy*.2;raf=requestAnimationFrame(step)};
+  addEventListener('wheel',e=>{if(e.ctrlKey||body.classList.contains('locked')||$('sheet').classList.contains('on'))return;
+    const ta=e.target.closest&&e.target.closest('textarea');if(ta&&ta.scrollHeight>ta.clientHeight)return;
+    e.preventDefault();go(e.deltaMode===1?e.deltaY*40:e.deltaMode===2?e.deltaY*innerHeight:e.deltaY)},{passive:false});
+  addEventListener('message',e=>{if(e.data&&typeof e.data.mdWheel==='number'&&!body.classList.contains('locked')&&!$('sheet').classList.contains('on'))go(e.data.mdWheel)});
+  addEventListener('scroll',()=>{if(!raf)target=sc.scrollTop},{passive:true})}
 /* ending plays when it comes into view */
 {const e=$('ending');let landed=false;if(e){if('IntersectionObserver' in window){const o=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){e.classList.add('in');if(!landed){landed=true;setTimeout(()=>bfPerchOn(e.querySelector('.dmwrap'),.42,.13,12000),2000)}}}),{threshold:.15});o.observe(e)}else e.classList.add('in')}}
 /* pin the opening text to the picture (not the screen) so every phone shows the same layout */
