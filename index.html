@@ -543,7 +543,7 @@ main .wrap{padding-bottom:0!important;margin-bottom:0!important}
 #sheet h3{font-family:var(--f-thai)!important;font-weight:600!important;letter-spacing:.02em!important;text-transform:none!important}
 #sheet .contacts b,.contacts b{font-family:var(--f-thai)!important;font-weight:500;font-size:17px;letter-spacing:.03em;font-variant-numeric:lining-nums tabular-nums}
 /* smooth scrolling: fixed backdrops keep one size while the browser bar slides; heavy layers get their own compositor layer */
-#bg,#veil,#wall,#wall3,#air,#bfclip{inset:auto!important;top:0!important;left:0!important;width:100%!important;height:100vh!important;height:100lvh!important}
+#bg,#veil,#wall,#wall3,#air,#bfclip{inset:auto!important;top:0!important;left:0!important;width:100%!important;height:100vh!important;height:var(--fixh,100lvh)!important}
 #bg img,#wall img,#wall3 img,.stage .behind,.stage .frame,.door,#gate{will-change:transform,opacity;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 #wall,#wall3,#veil{will-change:opacity;transform:translateZ(0)}
 #wall2,#wall4{display:none!important}
@@ -583,6 +583,8 @@ html[lang=en] #par{zoom:1}
 .card.ending{min-height:var(--lvhz,var(--vh,100vh))!important}
 html[lang=en] .vtx span{white-space:nowrap;font-size:calc(var(--vw1) * 2.92)!important;line-height:1.5}
 html[lang=en] .vic{width:54px!important;height:50px!important}
+/* opening page is as tall as the phone screen; the countdown stays where the first view ends, the extra is balcony only */
+.hero{height:var(--fixh,var(--vh,100vh))!important;padding-bottom:var(--herob,0px)!important;box-sizing:border-box}
 /* RSVP sheet */
 #sheet{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;background:rgba(90,48,64,.28);opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s linear .4s}
 #sheet.on{opacity:1;visibility:visible;transition:opacity .4s}
@@ -921,6 +923,8 @@ const setVh=force=>{if(!force&&innerWidth===lastW)return;lastW=innerWidth;docume
   let lvh=innerHeight;try{const pr=document.createElement('div');pr.style.cssText='position:fixed;top:0;left:0;width:1px;height:100vh;height:100lvh;visibility:hidden;pointer-events:none';document.body.appendChild(pr);lvh=Math.max(innerHeight,pr.getBoundingClientRect().height);pr.remove()}catch(e){}
   const z=(wrap&&canZ)?Math.min(1,Math.max(.8,innerWidth/390)):1;
   if(wrap&&canZ){wrap.style.zoom=z;wrap.style.setProperty('--vh',(innerHeight/z).toFixed(2)+'px')}
+  /* fixed backdrops get one constant height, as tall as the phone screen, so in-app browsers sliding their bars away never rescale or uncover them */
+  {const coarse=matchMedia('(pointer:coarse)').matches,sh=(screen&&screen.height)||0;const fh=Math.max(innerHeight,lvh,coarse&&sh<innerHeight*1.6?sh:0);document.documentElement.style.setProperty('--fixh',Math.round(fh)+'px');document.documentElement.style.setProperty('--herob',Math.max(0,Math.round(fh-innerHeight))+'px')}
   maxH=Math.max(maxH,lvh);if(wrap)wrap.style.setProperty('--lvhz',((maxH+48)/z).toFixed(2)+'px')
   window.dispatchEvent(new Event('mdsize'))};
 setVh(true);addEventListener('resize',()=>setVh(false));
