@@ -561,9 +561,9 @@ html[lang=en] #placeTh{white-space:nowrap;font-size:14.5px;letter-spacing:-.005e
   box-shadow:0 0 0 3px rgba(255,236,242,.75),0 8px 18px -8px rgba(60,90,150,.55),inset 0 1px 0 rgba(255,255,255,.9)}
 .ending .calbtn svg{color:#D0708E;width:16px;height:16px}
 /* English: each family on its own line so no name ever wraps; venue kept on one line */
-html[lang=en] .par2{grid-template-columns:1fr;gap:2px;margin-left:0;margin-right:0;font-size:14px;line-height:1.75!important}
+html[lang=en] .par2{font-size:min(13px,calc(var(--vw1) * 3.3))}
 html[lang=en] .par2 div{white-space:nowrap}
-html[lang=en] .par2 .and2{font-size:13px;opacity:.85}
+
 html[lang=en] #when{white-space:nowrap;font-size:min(13.5px,calc(var(--vw1) * 3.4))}
 /* RSVP sheet */
 #sheet{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;background:rgba(90,48,64,.28);opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s linear .4s}
@@ -918,7 +918,7 @@ let lang='th';const T=(th,en)=>lang==='en'?en:th;
 const TX=[['hintTxt','Scroll to read'],
   ['par','<div>The late Haji Samai Pooklai<br>Hajjah Winnee Pooklai</div><span class="and2">and</span><div>The late Kru Ibrahim Jaemin<br>Hajjah Aisah Pooklai</div>'],
   ['invTxt','request the honour of your presence<br>and the pleasure of your company at the wedding reception (Walimah)'],
-['when','Sunday, 13 December 2026<br>at Nongchokpittayanussorn Matthayom School'],['apology','(Please forgive us for not inviting you in person)'],['calTxt2','Save the date'],['giftHead','Wedding Gift'],['giftT','Send your blessings'],['giftS','with a gift via PromptPay'],['giftN','Miss Kanjana Pooklai'],['giftP','PromptPay xxx-xxx-6030'],['bTh','Miss Kanjana Pooklai (Muna)'],['gTh','Mr Anawin Ritto (Daee)'],
+['when','Sunday, 13 December 2026<br>at Nongchokpittayanussorn Matthayom School'],['apology','(Please forgive us for not inviting you in person)'],['calTxt2','Save the date'],['giftHead','Wedding Gift'],['giftT','Send your blessings'],['giftS','with a gift via PromptPay'],['giftN','Ms. Kanjana Pooklai'],['giftP','PromptPay xxx-xxx-6030'],['bTh','Ms. Kanjana Pooklai (Muna)'],['gTh','Mr. Anawin Ritto (Daee)'],
   ['vt0','Nikah<br>(marriage ceremony)'],['vt1','Ring ceremony'],['vt2','Lunch is served'],['vt3','Blessings for<br>the bride &amp; groom'],['vt4','Wedding celebration<br>(Walimah)'],['vt5','Photos with<br>the bride &amp; groom'],['vt6','Farewell'],
   
   ['tlHead','Wedding Timeline'],['thHead','Colour Theme'],['locHead','Location'],['placeTh','Nongchokpittayanussorn Matthayom School'],
