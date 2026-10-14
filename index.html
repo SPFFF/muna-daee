@@ -1004,12 +1004,13 @@ if(!reduce){
   const cardOpen=()=>document.body.classList.contains('cardOpen');
   bfReset=()=>{held=false;tid=null;perch=null;mode='start';fountain=null};
   bfPerchOn=(el,fx,fy,hold)=>{if(held||mode==='start'||!el||mode==='toTouch'||performance.now()-lastTouch<5000)return;perch={stay:true,pos:()=>{const r=el.getBoundingClientRect();return [r.left+r.width*fx,r.top+r.height*fy]}};mode='toFlower';modeUntil=performance.now()+1e9;stayFor=hold||6000};
-  bfGo=()=>{if(mode!=='start')return;introUntil=performance.now()+3100;vx=-.4;vy=-1.6;glide=0;mode='wander';wx=innerWidth*.5;wy=innerHeight*.62;modeUntil=performance.now()+4200;
-    const lg=document.querySelector('.mdlogo');
-    setTimeout(()=>{if(held||!lg||mode==='start'||mode==='toTouch'||performance.now()-lastTouch<5000)return;perch={stay:true,pos:()=>{const r=lg.getBoundingClientRect();return [r.left+r.width*.93,r.top+r.height*.34]}};mode='toFlower';modeUntil=performance.now()+1e9;stayFor=9000},3100)};
+  /* opening flight: rise up through the doorway, swing round in one smooth curve, glide down onto the corner of the M */
+  let script=null;
+  bfGo=()=>{if(mode!=='start')return;introUntil=performance.now()+4200;const lg=document.querySelector('.mdlogo');
+    script={t0:performance.now()+120,dur:4000,x0:x,y0:y,lg};mode='scripted';glide=0};
   // a new touch always becomes the new destination: shed most of the old momentum so it turns right away
   const retarget=()=>{vx*=.2;vy*=.2;glide=0};
-  const press=(cx,cy)=>{if(!cardOpen())return;lastTouch=performance.now();perch=null;fx=cx;fy=cy;retarget();
+  const press=(cx,cy)=>{if(!cardOpen())return;lastTouch=performance.now();perch=null;if(script){script=null;if(mode==='scripted')mode='wander'}fx=cx;fy=cy;retarget();
     if(Math.hypot(cx-x,cy-y)<70){hearts(4);pollen(x,y,0,0,5);lastHeart=performance.now()}
     if(!held){held=true;perch=null;mode='toHand';onHandSince=0}};
   const move=(cx,cy)=>{if(held){fx=cx;fy=cy}};
@@ -1056,6 +1057,22 @@ if(!reduce){
   function fly(now){
     const dt=Math.min(.05,(now-last)/1000);last=now;const t=(now-t0)/1000;const f=Math.max(.25,dt*60);
     let gx,gy,perched=false,onHand=false,follow=false,hover=false,passing=false;
+    if(script&&!held){const sc=script,u=Math.max(0,Math.min(1,(now-sc.t0)/sc.dur));
+      const r=sc.lg.getBoundingClientRect(),X3=r.left+r.width*.93,Y3=r.top+r.height*.34-14;
+      const X0=sc.x0,Y0=sc.y0,X1=X0-innerWidth*.22,Y1=Y0-innerHeight*.42,X2=X3+innerWidth*.2,Y2=Y3-innerHeight*.1;
+      const e=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2,m=1-e;
+      let nx=m*m*m*X0+3*m*m*e*X1+3*m*e*e*X2+e*e*e*X3,ny=m*m*m*Y0+3*m*m*e*Y1+3*m*e*e*Y2+e*e*e*Y3;
+      ny+=Math.sin(t*7)*4*Math.sin(Math.PI*u);nx+=Math.sin(t*3.1)*5*Math.sin(Math.PI*u);
+      if(now>=sc.t0){vx=(nx-x)/f;vy=(ny-y)/f;x=nx;y=ny}
+      if(u>=1){script=null;perch={stay:true,pos:()=>{const q=sc.lg.getBoundingClientRect();return [q.left+q.width*.93,q.top+q.height*.34]}};mode='perched';modeUntil=now+9000;vx=vy=0}
+      const sn=Math.sin(ph+=dt*2.1*Math.PI*2);const a2=15+45*sn;
+      wL.style.transform=`rotateY(${a2.toFixed(1)}deg)`;wR.style.transform=`rotateY(${(-a2).toFixed(1)}deg)`;
+      {const a=1-Math.pow(.88,f);svx+=(vx-svx)*a;svy+=(vy-svy)*a}
+      const want=Math.hypot(svx,svy)>.3?Math.atan2(svy,svx)*57.2958+90:ang;const d=((want-ang+540)%360)-180;ang+=d*(1-Math.pow(.9,f));
+      const wantYaw=Math.max(-40,Math.min(40,svx*14));yaw+=(wantYaw-yaw)*(1-Math.pow(.94,f));tilt+=(22-tilt)*(1-Math.pow(.92,f));
+      b3.style.transform=`rotateX(${tilt.toFixed(1)}deg) rotateY(${yaw.toFixed(1)}deg)`;
+      bf.style.transform=`translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) rotate(${ang.toFixed(1)}deg)`;
+      requestAnimationFrame(fly);return}
     if(held){
       follow=true;gx=fx;gy=fy-HAND_UP;
       const dist=Math.hypot(gx-x,gy-y);
