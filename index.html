@@ -561,7 +561,7 @@ html[lang=en] #placeTh{white-space:nowrap;font-size:14.5px;letter-spacing:-.005e
   box-shadow:0 0 0 3px rgba(255,236,242,.75),0 8px 18px -8px rgba(60,90,150,.55),inset 0 1px 0 rgba(255,255,255,.9)}
 .ending .calbtn svg{color:#D0708E;width:16px;height:16px}
 /* English: each family on its own line so no name ever wraps; venue kept on one line */
-html[lang=en] .par2{font-size:min(13px,calc(var(--vw1) * 3.3))}
+html[lang=en] .par2{font-size:min(12px,calc(var(--vw1) * 3.08))}
 html[lang=en] .par2 div{white-space:nowrap}
 
 html[lang=en] #when{white-space:nowrap;font-size:min(13.5px,calc(var(--vw1) * 3.4))}
@@ -574,6 +574,9 @@ html[lang=en] #when{white-space:nowrap;font-size:min(13.5px,calc(var(--vw1) * 3.
 #sendTxt.pri:active,.mapcard:active .go{filter:brightness(.97)}
 #sendTxt.pri:disabled{opacity:.7}
 #addr{white-space:nowrap}
+/* invitation text a touch larger; same line breaks */
+#par,#invTxt,#couple .cf,.whenwrap{zoom:1.08}
+html[lang=en] #par{zoom:1}
 /* RSVP sheet */
 #sheet{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;background:rgba(90,48,64,.28);opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s linear .4s}
 #sheet.on{opacity:1;visibility:visible;transition:opacity .4s}
