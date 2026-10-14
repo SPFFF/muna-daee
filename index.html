@@ -997,16 +997,16 @@ if(!reduce){
   // opens resting on the fountain's upper bowl until the first touch
   let fountain=null,stayFor=6000,lastTouch=-1e9;
   const pickStart=()=>{const ps=intro.perches();if(!ps.length)return null;const sc=p=>{const[x,y]=p.pos();return Math.abs(x-innerWidth*.62)-y*.8};ps.sort((a,c)=>sc(a)-sc(c));return ps[0]};
-  let mode='start',wx=innerWidth*.5,wy=innerHeight*.4,modeUntil=0,perch=null;
+  let introUntil=0,mode='start',wx=innerWidth*.5,wy=innerHeight*.4,modeUntil=0,perch=null;
   const t0=last;
   function hearts(n){for(let i=0;i<n;i++)setTimeout(heart,i*110)}
   // the tap that opens the gate must not wake it: only touches on the open card count
   const cardOpen=()=>document.body.classList.contains('cardOpen');
   bfReset=()=>{held=false;tid=null;perch=null;mode='start';fountain=null};
   bfPerchOn=(el,fx,fy,hold)=>{if(held||mode==='start'||!el||mode==='toTouch'||performance.now()-lastTouch<5000)return;perch={stay:true,pos:()=>{const r=el.getBoundingClientRect();return [r.left+r.width*fx,r.top+r.height*fy]}};mode='toFlower';modeUntil=performance.now()+1e9;stayFor=hold||6000};
-  bfGo=()=>{if(mode!=='start')return;vx=-.4;vy=-1.6;glide=0;mode='wander';wx=innerWidth*.5;wy=innerHeight*.62;modeUntil=performance.now()+4200;
+  bfGo=()=>{if(mode!=='start')return;introUntil=performance.now()+3100;vx=-.4;vy=-1.6;glide=0;mode='wander';wx=innerWidth*.5;wy=innerHeight*.62;modeUntil=performance.now()+4200;
     const lg=document.querySelector('.mdlogo');
-    setTimeout(()=>{if(held||!lg||mode==='start'||mode==='toTouch'||performance.now()-lastTouch<5000)return;perch={stay:true,pos:()=>{const r=lg.getBoundingClientRect();return [r.left+r.width*.93,r.top+r.height*.34]}};mode='toFlower';modeUntil=performance.now()+1e9;stayFor=9000},250)};
+    setTimeout(()=>{if(held||!lg||mode==='start'||mode==='toTouch'||performance.now()-lastTouch<5000)return;perch={stay:true,pos:()=>{const r=lg.getBoundingClientRect();return [r.left+r.width*.93,r.top+r.height*.34]}};mode='toFlower';modeUntil=performance.now()+1e9;stayFor=9000},3100)};
   // a new touch always becomes the new destination: shed most of the old momentum so it turns right away
   const retarget=()=>{vx*=.2;vy*=.2;glide=0};
   const press=(cx,cy)=>{if(!cardOpen())return;lastTouch=performance.now();perch=null;fx=cx;fy=cy;retarget();
@@ -1048,7 +1048,8 @@ if(!reduce){
   function nextIdle(now){
     const v=visiblePerches();
     // touch always wins; only after ~5s without touch does it consider landing, and then mostly keeps circling
-    if(now-lastTouch>5000&&v.length&&Math.random()<.22){perch=v[Math.random()*v.length|0];mode='toFlower';modeUntil=now+12000}
+    if(now>introUntil&&now-lastTouch>5000&&v.length&&Math.random()<.22){perch=v[Math.random()*v.length|0];mode='toFlower';modeUntil=now+12000}
+    else if(now<introUntil){mode='wander';perch=null;wx=innerWidth*(.2+Math.random()*.6);wy=innerHeight*(.35+Math.random()*.35);modeUntil=Math.min(introUntil,now+1400)}
     else{mode='wander';perch=null;wx=40+Math.random()*(innerWidth-80);wy=90+Math.random()*(innerHeight-200);modeUntil=now+4500+Math.random()*3500}
   }
   const HAND_UP=16; // sits just on the fingertip
