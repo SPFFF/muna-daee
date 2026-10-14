@@ -577,6 +577,10 @@ html[lang=en] #when{white-space:nowrap;font-size:min(13.5px,calc(var(--vw1) * 3.
 /* invitation text a touch larger; same line breaks */
 #par,#invTxt,#couple .cf,.whenwrap{zoom:1.08}
 html[lang=en] #par{zoom:1}
+/* timeline labels match the invitation text size */
+.vtx span{font-size:calc(var(--vw1) * 3.25 * 1.08)!important;color:#754454}
+/* the closing frame is as tall as the screen with the browser bar hidden, so nothing above peeks in */
+.card.ending{min-height:var(--lvhz,var(--vh,100vh))!important}
 /* RSVP sheet */
 #sheet{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;background:rgba(90,48,64,.28);opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s linear .4s}
 #sheet.on{opacity:1;visibility:visible;transition:opacity .4s}
@@ -912,7 +916,10 @@ if(window.__phone||matchMedia('(pointer:fine)').matches){let target=0,raf=0;cons
 {const wrap=document.querySelector('main .wrap'),canZ=window.CSS&&CSS.supports&&CSS.supports('zoom','1');let lastW=-1;
 const setVh=force=>{if(!force&&innerWidth===lastW)return;lastW=innerWidth;document.documentElement.style.setProperty('--vh',innerHeight+'px');
   /* scale the reading pages as one piece from a 390px-wide design so every screen breaks lines the same way */
-  if(wrap&&canZ){const z=Math.min(1,Math.max(.8,innerWidth/390));wrap.style.zoom=z;wrap.style.setProperty('--vh',(innerHeight/z).toFixed(2)+'px')}
+  let lvh=innerHeight;try{const pr=document.createElement('div');pr.style.cssText='position:fixed;top:0;left:0;width:1px;height:100vh;height:100lvh;visibility:hidden;pointer-events:none';document.body.appendChild(pr);lvh=Math.max(innerHeight,pr.getBoundingClientRect().height);pr.remove()}catch(e){}
+  const z=(wrap&&canZ)?Math.min(1,Math.max(.8,innerWidth/390)):1;
+  if(wrap&&canZ){wrap.style.zoom=z;wrap.style.setProperty('--vh',(innerHeight/z).toFixed(2)+'px')}
+  if(wrap)wrap.style.setProperty('--lvhz',(lvh/z).toFixed(2)+'px')
   window.dispatchEvent(new Event('mdsize'))};
 setVh(true);addEventListener('resize',()=>setVh(false));addEventListener('orientationchange',()=>setTimeout(()=>setVh(true),350))}
 /* corner flower frame hidden on the invitation (bismillah) screen and the colour-theme screen; shown elsewhere */
