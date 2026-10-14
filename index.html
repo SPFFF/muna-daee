@@ -596,6 +596,8 @@ html.inner,html.inner body{height:100%;overflow:hidden}
 html.inner body{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:none}
 html.inner body.locked{overflow-y:auto}
 html.inner #gate{touch-action:none}
+/* the opening scene and the balcony behind it share one size, so the cross-fade lines up exactly (no double image in Safari/Chrome) */
+#gate{inset:auto!important;top:0!important;left:0!important;width:100%!important;height:100vh!important;height:100lvh!important}
 /* RSVP sheet */
 #sheet{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;background:rgba(90,48,64,.28);opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s linear .4s}
 #sheet.on{opacity:1;visibility:visible;transition:opacity .4s}
