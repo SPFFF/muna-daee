@@ -913,15 +913,18 @@ if(window.__phone||matchMedia('(pointer:fine)').matches){let target=0,raf=0;cons
 {const hero=document.querySelector('.hero'),bgEl=$('bg');const fit=()=>{const W=innerWidth,H=(bgEl&&bgEl.getBoundingClientRect().height)||innerHeight,s=Math.max(W/768,H/1376),bh=1376*s,top=(H-bh)/2;
   hero.style.setProperty('--u',(bh/100).toFixed(2)+'px');hero.style.setProperty('--htop',(top+bh*(!window.__phone&&H/W>1376/768?.17:.255)).toFixed(1)+'px')};fit();addEventListener('mdsize',fit)}
 /* real visible height (in-app browsers report dvh differently) */
-{const wrap=document.querySelector('main .wrap'),canZ=window.CSS&&CSS.supports&&CSS.supports('zoom','1');let lastW=-1;
+{let maxH=0;const wrap=document.querySelector('main .wrap'),canZ=window.CSS&&CSS.supports&&CSS.supports('zoom','1');let lastW=-1;
 const setVh=force=>{if(!force&&innerWidth===lastW)return;lastW=innerWidth;document.documentElement.style.setProperty('--vh',innerHeight+'px');
   /* scale the reading pages as one piece from a 390px-wide design so every screen breaks lines the same way */
   let lvh=innerHeight;try{const pr=document.createElement('div');pr.style.cssText='position:fixed;top:0;left:0;width:1px;height:100vh;height:100lvh;visibility:hidden;pointer-events:none';document.body.appendChild(pr);lvh=Math.max(innerHeight,pr.getBoundingClientRect().height);pr.remove()}catch(e){}
   const z=(wrap&&canZ)?Math.min(1,Math.max(.8,innerWidth/390)):1;
   if(wrap&&canZ){wrap.style.zoom=z;wrap.style.setProperty('--vh',(innerHeight/z).toFixed(2)+'px')}
-  if(wrap)wrap.style.setProperty('--lvhz',(lvh/z).toFixed(2)+'px')
+  maxH=Math.max(maxH,lvh);if(wrap)wrap.style.setProperty('--lvhz',((maxH+48)/z).toFixed(2)+'px')
   window.dispatchEvent(new Event('mdsize'))};
-setVh(true);addEventListener('resize',()=>setVh(false));addEventListener('orientationchange',()=>setTimeout(()=>setVh(true),350))}
+setVh(true);addEventListener('resize',()=>setVh(false));
+/* in-app browsers (LINE, Instagram, Facebook) and Chrome grow the page when their bars slide away: the closing frame only ever grows with it */
+const grow=()=>{const h=Math.max(innerHeight,window.visualViewport?visualViewport.height:0);if(h>maxH&&wrap){maxH=h;const z=parseFloat(wrap.style.zoom)||1;wrap.style.setProperty('--lvhz',((maxH+48)/z).toFixed(2)+'px')}};
+addEventListener('resize',grow);addEventListener('scroll',()=>{if(innerHeight>maxH)grow()},{passive:true});if(window.visualViewport)visualViewport.addEventListener('resize',grow);addEventListener('orientationchange',()=>setTimeout(()=>setVh(true),350))}
 /* corner flower frame hidden on the invitation (bismillah) screen and the colour-theme screen; shown elsewhere */
 {const pr=document.querySelector('.pair'),inv=document.querySelector('.wrap > .card');const endc=document.getElementById('ending');if(pr){let tk=false;const over=e=>{const r=e.getBoundingClientRect();return r.top<innerHeight*.5&&r.bottom>innerHeight*.5};const chk=()=>{tk=false;body.classList.remove('blue');body.classList.toggle('marble',inv.getBoundingClientRect().top<innerHeight*.5);body.classList.toggle('endbg',!!(endc&&endc.getBoundingClientRect().top<innerHeight*.6));body.classList.toggle('noframe',over(pr)||over(inv)||(endc&&endc.getBoundingClientRect().top<innerHeight*.6))};addEventListener('scroll',()=>{if(!tk){tk=true;requestAnimationFrame(chk)}},{passive:true});chk()}}
 /* crystal hearts */
