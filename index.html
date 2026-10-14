@@ -872,9 +872,12 @@ if(window.__phone||matchMedia('(pointer:fine)').matches){let target=0,raf=0;cons
 {const e=$('ending');let landed=false;if(e){if('IntersectionObserver' in window){const o=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){e.classList.add('in');if(!landed){landed=true;setTimeout(()=>bfPerchOn(e.querySelector('.dmwrap'),.42,.13,12000),2000)}}}),{threshold:.15});o.observe(e)}else e.classList.add('in')}}
 /* pin the opening text to the picture (not the screen) so every phone shows the same layout */
 {const hero=document.querySelector('.hero');const fit=()=>{const W=innerWidth,H=innerHeight,s=Math.max(W/768,H/1376),bh=1376*s,top=(H-bh)/2;
-  hero.style.setProperty('--u',(bh/100).toFixed(2)+'px');hero.style.setProperty('--htop',(top+bh*(H/W>1376/768?.17:.255)).toFixed(1)+'px')};fit();addEventListener('resize',fit)}
+  hero.style.setProperty('--u',(bh/100).toFixed(2)+'px');hero.style.setProperty('--htop',(top+bh*(!window.__phone&&H/W>1376/768?.17:.255)).toFixed(1)+'px')};fit();addEventListener('resize',fit)}
 /* real visible height (in-app browsers report dvh differently) */
-{const setVh=()=>document.documentElement.style.setProperty('--vh',innerHeight+'px');setVh();addEventListener('resize',setVh);addEventListener('orientationchange',()=>setTimeout(setVh,300))}
+{const wrap=document.querySelector('main .wrap'),canZ=window.CSS&&CSS.supports&&CSS.supports('zoom','1');
+const setVh=()=>{document.documentElement.style.setProperty('--vh',innerHeight+'px');
+  /* scale the reading pages as one piece from a 390px-wide design so every screen breaks lines the same way */
+  if(wrap&&canZ){const z=Math.min(1.4,Math.max(.8,innerWidth/390));wrap.style.zoom=z;wrap.style.setProperty('--vh',(innerHeight/z).toFixed(2)+'px')}};setVh();addEventListener('resize',setVh);addEventListener('orientationchange',()=>setTimeout(setVh,300))}
 /* corner flower frame hidden on the invitation (bismillah) screen and the colour-theme screen; shown elsewhere */
 {const pr=document.querySelector('.pair'),inv=document.querySelector('.wrap > .card');const endc=document.getElementById('ending');if(pr){let tk=false;const over=e=>{const r=e.getBoundingClientRect();return r.top<innerHeight*.5&&r.bottom>innerHeight*.5};const chk=()=>{tk=false;body.classList.remove('blue');body.classList.toggle('marble',inv.getBoundingClientRect().top<innerHeight*.5);body.classList.toggle('endbg',!!(endc&&endc.getBoundingClientRect().top<innerHeight*.6));body.classList.toggle('noframe',over(pr)||over(inv)||(endc&&endc.getBoundingClientRect().top<innerHeight*.6))};addEventListener('scroll',()=>{if(!tk){tk=true;requestAnimationFrame(chk)}},{passive:true});chk()}}
 /* crystal hearts */
@@ -890,11 +893,11 @@ let lang='th';const T=(th,en)=>lang==='en'?en:th;
 const TX=[['hintTxt','Scroll to read'],
   ['par','<div>The late Haji Samai Pooklai<br>Hajjah Winnee Pooklai</div><span class="and2">and</span><div>The late Kru Ibrahim Jaemin<br>Hajjah Aisah Pooklai</div>'],
   ['invTxt','request the honour of your presence<br>and the pleasure of your company at the wedding reception (Walimah)'],
-['when','Sunday, 13 December 2026<br>at Nongchokpittayanusorn Matthayom School'],['apology','(Please forgive us for not inviting you in person)'],['calTxt2','Save the date'],['giftHead','Wedding Gift'],['giftT','Send your blessings'],['giftS','with a gift via PromptPay'],['giftN','Miss Kanjana Pooklai'],['giftP','PromptPay xxx-xxx-6030'],['bTh','Miss Kanjana Pooklai (Muna)'],['gTh','Mr Anawin Ritto (Daee)'],
+['when','Sunday, 13 December 2026<br>at Nongchokpittayanussorn Matthayom School'],['apology','(Please forgive us for not inviting you in person)'],['calTxt2','Save the date'],['giftHead','Wedding Gift'],['giftT','Send your blessings'],['giftS','with a gift via PromptPay'],['giftN','Miss Kanjana Pooklai'],['giftP','PromptPay xxx-xxx-6030'],['bTh','Miss Kanjana Pooklai (Muna)'],['gTh','Mr Anawin Ritto (Daee)'],
   ['vt0','Nikah<br>(marriage ceremony)'],['vt1','Ring ceremony'],['vt2','Lunch is served'],['vt3','Blessings for<br>the bride &amp; groom'],['vt4','Wedding celebration<br>(Walimah)'],['vt5','Photos with<br>the bride &amp; groom'],['vt6','Farewell'],
   
-  ['tlHead','Wedding Timeline'],['thHead','Colour Theme'],['locHead','Location'],['placeTh','Nongchokpittayanusorn Matthayom School'],
-  ['addr','31/1 Soi Mit Maitri 4, Mit Maitri Rd, Nong Chok, Bangkok 10530'],
+  ['tlHead','Wedding Timeline'],['thHead','Colour Theme'],['locHead','Location'],['placeTh','Nongchokpittayanussorn<br>Matthayom School'],
+  ['addr','31/1 Soi Mit Maitri 4, Mit Maitri Rd,<br>Nong Chok, Bangkok 10530'],
   ['rsvpSub','Kindly reply to confirm your attendance'],
   ['lblName','Full name'],['lblRel','Relationship to the couple'],['o0','Choose…'],['o2',"Groom's family"],['o3',"Bride's family"],['o4',"Groom's friend"],['o5',"Bride's friend"],['o6','Other'],
   ['lblGo','Will you attend?'],['goYes','Joyfully attend'],['goNo',"Can't make it"],['lblCount','Guests (including you)'],['lblPeople','people'],
