@@ -912,7 +912,7 @@ $('fm').addEventListener('submit',e=>{e.preventDefault();const miss=[];
   if(FORM.url){sendForm();return}
   fill();sheet.classList.add('on')});
 /* Google Form: answers go straight into the couple's Google Sheet (fill in the form link + entry ids) */
-const FORM={url:'',name:'',rel:'',go:'',count:'',tel:'',wish:''};
+const FORM={url:'https://docs.google.com/forms/d/e/1FAIpQLSeJFtKM_3njHxLqa4z6BqBDYop6Gt4M5a5g1j1oe96A1b8OXQ/formResponse',name:'361796445',rel:'1389382263',go:'2129291801',count:'1921754493',tel:'7394324',wish:'323209733'};
 function sendForm(){const b=$('sendTxt');if(b.disabled)return;b.disabled=true;const old=b.textContent;b.textContent=T('กำลังส่ง…','Sending…');
   const yes=go==='yes',fd=new URLSearchParams();const put=(k,v)=>{if(FORM[k])fd.append('entry.'+FORM[k],v)};
   put('name',$('gName').value.trim());put('rel',$('gRel').selectedOptions[0].textContent);put('go',yes?'ยินดีมาร่วมงาน':'ไม่สะดวกมาร่วมงาน');put('count',yes?String(count):'0');put('tel',$('gTel').value.trim());put('wish',$('gWish').value.trim());
