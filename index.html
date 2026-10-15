@@ -953,7 +953,7 @@ if(window.__phone||matchMedia('(pointer:fine)').matches){let target=0,raf=0;cons
 {const e=$('ending');let landed=false;if(e){if('IntersectionObserver' in window){const o=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){e.classList.add('in');if(!landed){landed=true;setTimeout(()=>bfPerchOn(e.querySelector('.dmwrap'),.42,.13,12000),2000)}}}),{threshold:.15});o.observe(e)}else e.classList.add('in')}}
 /* pin the opening text to the picture (not the screen) so every phone shows the same layout */
 {const hero=document.querySelector('.hero'),bgEl=$('bg');const fit=()=>{const W=innerWidth,H=(bgEl&&bgEl.getBoundingClientRect().height)||innerHeight,s=Math.max(W/768,H/1376),bh=1376*s,top=(H-bh)/2;
-  hero.style.setProperty('--u',(bh/100).toFixed(2)+'px');hero.style.setProperty('--htop',(top+bh*(!window.__phone&&H/W>1376/768?.17:.255)).toFixed(1)+'px')};fit();addEventListener('mdsize',fit)}
+  hero.style.setProperty('--u',(bh/100).toFixed(2)+'px');hero.style.setProperty('--htop',(top+bh*(!window.__phone&&H/W>1376/768?.205:.255)).toFixed(1)+'px')};fit();addEventListener('mdsize',fit)}
 /* real visible height (in-app browsers report dvh differently) */
 {let maxH=0;const wrap=document.querySelector('main .wrap'),canZ=window.CSS&&CSS.supports&&CSS.supports('zoom','1');let lastW=-1;
 const setVh=force=>{if(!force&&innerWidth===lastW)return;lastW=innerWidth;document.documentElement.style.setProperty('--vh',innerHeight+'px');
