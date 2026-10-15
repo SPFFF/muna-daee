@@ -613,6 +613,17 @@ body.scrolled.invbg #wall5{opacity:1}
 #couple .cf{margin-left:0!important;margin-right:0!important}
 #couple .cf{display:flex!important;justify-content:center;gap:28px!important}
 #couple .cf > div{width:max-content;text-align:center}
+/* softer backdrops (window + sky) and stronger text on every reading page */
+#wall::after,#wall5::after{content:"";position:absolute;inset:0;background:rgba(255,250,251,.42);pointer-events:none}
+main .wrap{--ink:#5A2638;--plum:#5A2638;color:#5A2638}
+main .wrap .card{text-shadow:0 0 6px rgba(255,255,255,.9),0 0 2px rgba(255,255,255,.8)}
+main .wrap .card:not(.ending) p,main .wrap .card:not(.ending) span,main .wrap .card:not(.ending) div{font-weight:500}
+main .wrap .card:not(.ending) h2{font-weight:600!important;color:#5A2638}
+.vtx span,.addr,.gnote{color:#5A2638!important}
+/* ending: the two lines under the thank-you, darker and bolder */
+.ending .enden{color:#5E2F42!important;font-weight:700!important;font-size:14px!important;text-shadow:0 0 8px #fff,0 0 3px #fff,0 0 1px #fff!important}
+.ending .enddate{color:#5E2F42!important;font-weight:700!important;font-size:21px!important;text-shadow:0 0 8px #fff,0 0 3px #fff,0 0 1px #fff!important}
+.ending .endty{color:#4E2235!important;font-weight:600!important}
 /* RSVP sheet */
 #sheet{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;background:rgba(90,48,64,.28);opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s linear .4s}
 #sheet.on{opacity:1;visibility:visible;transition:opacity .4s}
