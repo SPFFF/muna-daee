@@ -573,7 +573,8 @@ html[lang=en] #when{white-space:nowrap;font-size:min(13.5px,calc(var(--vw1) * 3.
 #sendTxt.pri:disabled{opacity:.7}
 #addr{white-space:nowrap}
 /* invitation text a touch larger; same line breaks */
-#par,#invTxt,#couple .cf,.whenwrap{zoom:1.08}
+#par,#invTxt,#couple .cf,.whenwrap{zoom:1.2}
+#invTxt,#when,#apology,#couple .cf span{white-space:nowrap}
 html[lang=en] #par{zoom:1}
 /* timeline labels match the invitation text size */
 .vtx span{font-size:calc(var(--vw1) * 3.25 * 1.08)!important;color:#754454}
@@ -963,10 +964,12 @@ const setVh=force=>{if(!force&&innerWidth===lastW)return;lastW=innerWidth;docume
   if(wrap&&canZ){wrap.style.zoom=z;wrap.style.setProperty('--vh',(innerHeight/z).toFixed(2)+'px')}
   maxH=Math.max(maxH,lvh);if(wrap)wrap.style.setProperty('--lvhz',((maxH+48)/z).toFixed(2)+'px')
   {const card=document.querySelector('.wrap > .card');if(card&&canZ){const H=Math.max(innerHeight,lvh),W=innerWidth,s=Math.max(W/1080,H/1745),iw=1080*s,ox=(W-iw)/2;
-    const L=ox+iw*.135,R=ox+iw*.875,room=Math.max(200,(R-L)-28),need=372*(parseFloat(wrap.style.zoom)||1),k=Math.min(1,room/need);
+    const L=ox+iw*.135,R=ox+iw*.875,room=Math.max(200,(R-L)-14);
     const ih=1745*s,oy=(H-ih)/2,Tt=Math.max(16,oy+ih*.085),Tb=Math.min(innerHeight-12,oy+ih*.745),Z=parseFloat(wrap.style.zoom)||1;
     const put=k=>{card.style.zoom=k;const u=Z*k;card.style.setProperty('--vh',(innerHeight/u).toFixed(2)+'px');card.style.setProperty('--ipt',(Tt/u).toFixed(1)+'px');card.style.setProperty('--ipb',((innerHeight-Tb)/u).toFixed(1)+'px')};
-    put(k);const hh=[...card.children].reduce((a,c)=>a+c.getBoundingClientRect().height,0),avail=(Tb-Tt)*.86;if(hh>avail)put(k*avail/hh)}}
+    put(1);let mnL=1e9,mxR=-1e9;const tw=document.createTreeWalker(card,NodeFilter.SHOW_TEXT);let n;while(n=tw.nextNode()){if(!n.nodeValue.trim())continue;const r=document.createRange();r.selectNodeContents(n);for(const q of r.getClientRects()){if(q.width){mnL=Math.min(mnL,q.left);mxR=Math.max(mxR,q.right)}}}
+    const wide=Math.max(1,mxR-mnL);
+    const k=Math.min(1,room/Math.max(1,wide));put(k);const hh=[...card.children].reduce((a,c)=>a+c.getBoundingClientRect().height,0),avail=(Tb-Tt)*.86;if(hh>avail)put(k*avail/hh)}}
   window.dispatchEvent(new Event('mdsize'))};
 setVh(true);addEventListener('resize',()=>setVh(false));
 /* in-app browsers (LINE, Instagram, Facebook) and Chrome grow the page when their bars slide away: the closing frame only ever grows with it */
@@ -986,7 +989,7 @@ addEventListener('resize',grow);addEventListener('scroll',()=>{if(innerHeight>ma
 let lang='th';const T=(th,en)=>lang==='en'?en:th;
 const TX=[['hintTxt','Scroll to read'],
   ['par','<div>The late Haji Samai Pooklai<br>Hajjah Winnee Pooklai</div><span class="and2">and</span><div>The late Kru Ibrahim Jaemin<br>Hajjah Aisah Pooklai</div>'],
-  ['invTxt','request the honour of your presence<br>and the pleasure of your company at the wedding reception (Walimah)'],
+  ['invTxt','request the honour of your presence<br>and the pleasure of your company at the wedding<br>reception (Walimah)'],
 ['when','Sunday, 13 December 2026<br>at Nongchokpittayanussorn Matthayom School'],['apology','(Please forgive us for not inviting you in person)'],['calTxt2','Save the date'],['giftHead','Wedding Gift'],['mapGo','OPEN MAP ›'],['giftT','Send your blessings'],['giftS','with a gift via PromptPay'],['giftN','Ms. Kanjana Pooklai'],['giftP','PromptPay xxx-xxx-6030'],['bTh','Ms. Kanjana Pooklai (Muna)'],['gTh','Mr. Anawin Ritto (Daee)'],
   ['vt0','Nikah<br>(marriage ceremony)'],['vt1','Ring ceremony'],['vt2','Lunch is served'],['vt3','Blessings for<br>the bride &amp; groom'],['vt4','Wedding celebration<br>(Walimah)'],['vt5','Photos with<br>the bride &amp; groom'],['vt6','Farewell'],
   
