@@ -605,8 +605,9 @@ html.inner #gate{touch-action:none}
 body.scrolled.invbg #wall5{opacity:1}
 /* colour theme: six balloons that sway on their strings */
 .gems{aspect-ratio:1200/220!important}
-.gem .g{animation:petalturn 14s linear infinite!important;animation-delay:calc(var(--i) * -2.3s)!important;transform-origin:50% 50%}
-.gem.spin .g{animation:spin .9s cubic-bezier(.3,.7,.3,1),petalturn 14s linear .9s infinite!important}
+.gem .g{animation:rsway 4.2s ease-in-out infinite!important;animation-delay:calc(var(--i) * -.7s)!important;transform-origin:50% 60%}
+@keyframes rsway{0%,100%{transform:rotate(-3deg) scale(1)}50%{transform:rotate(3deg) scale(1.03)}}
+.gem.spin .g{animation:bpop .6s cubic-bezier(.3,1.6,.5,1),rsway 4.2s ease-in-out .6s infinite!important}
 @keyframes bsway{0%,100%{transform:rotate(-5deg) translateY(0)}50%{transform:rotate(5deg) translateY(-6px)}}
 @keyframes bpop{0%{transform:scale(1)}40%{transform:scale(1.22) translateY(-10px)}100%{transform:scale(1)}}
 .wrap > .card:first-child{padding-top:var(--ipt,max(7dvh,48px))!important;padding-bottom:var(--ipb,max(5dvh,28px))!important}
