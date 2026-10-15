@@ -610,6 +610,9 @@ body.scrolled.invbg #wall5{opacity:1}
 @keyframes bsway{0%,100%{transform:rotate(-5deg) translateY(0)}50%{transform:rotate(5deg) translateY(-6px)}}
 @keyframes bpop{0%{transform:scale(1)}40%{transform:scale(1.22) translateY(-10px)}100%{transform:scale(1)}}
 .wrap > .card:first-child{padding-top:var(--ipt,max(7dvh,48px))!important;padding-bottom:var(--ipb,max(5dvh,28px))!important}
+#couple .cf{margin-left:0!important;margin-right:0!important}
+#couple .cf{display:flex!important;justify-content:center;gap:28px!important}
+#couple .cf > div{width:max-content;text-align:center}
 /* RSVP sheet */
 #sheet{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;background:rgba(90,48,64,.28);opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s linear .4s}
 #sheet.on{opacity:1;visibility:visible;transition:opacity .4s}
